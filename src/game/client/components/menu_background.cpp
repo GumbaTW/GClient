@@ -46,6 +46,8 @@ std::array<vec2, CMenuBackground::NUM_POS> GenerateMenuBackgroundPositions()
 	for(int i = 0; i < CMenuBackground::POS_RESERVED_NUM; ++i)
 		Positions[CMenuBackground::POS_RESERVED0 + i] = vec2(0, 0);
 
+	Positions[CMenuBackground::POS_SETTINGS_GCLIENT] = vec2(1150.0f, 300.0f);
+
 	return Positions;
 }
 
