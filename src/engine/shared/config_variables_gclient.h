@@ -7,6 +7,12 @@
 #define MACRO_CONFIG_STR(Gcme, ScriptName, Len, Def, Save, Desc) ;
 #endif
 
+// Gun/shotgun muzzle flash (drawn with the shooter; can appear behind other tees)
+MACRO_CONFIG_INT(GcGunMuzzleFlash, gc_gun_muzzle_flash, 1, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Show gun and shotgun muzzle flash when firing")
+
+// Gun bullet impact: vanilla spawns 10 DamageInd net events (star sprites) in a fan — can draw behind other tees
+MACRO_CONFIG_INT(GcGunHitDamageInd, gc_gun_hit_damage_ind, 1, 0, 1, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Show star burst when a gun bullet hits (10-event DamageInd; also hides client prediction of the same)")
+
 // Vanilla hammer hit sprite (SPRITE_PART_HIT01) on connect — same scale as stock DDNet at 120; 0 disables
 MACRO_CONFIG_INT(GcHammerHitVanillaBurst, gc_hammer_hit_vanilla_burst, 120, 0, 220, CFGFLAG_CLIENT | CFGFLAG_SAVE, "Vanilla hammer hit burst size (0 off, ~120 stock)")
 

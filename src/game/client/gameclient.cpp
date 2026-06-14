@@ -1439,6 +1439,27 @@ void CGameClient::ProcessEvents()
 		{
 			const CNetEvent_DamageInd *pEvent = (const CNetEvent_DamageInd *)Item.m_pData;
 
+			if(!g_Config.m_GcGunHitDamageInd)
+			{
+				// Vanilla gun uses CreateDamageInd(..., Amount=10): ten events at the same pixel (star fan).
+				int GunBurstCount = 1;
+				for(int k = Index + 1; k < Num; k++)
+				{
+					const IClient::CSnapItem NextItem = Client()->SnapGetItem(SnapType, k);
+					if(NextItem.m_Type != NETEVENTTYPE_DAMAGEIND)
+						break;
+					const CNetEvent_DamageInd *pNext = (const CNetEvent_DamageInd *)NextItem.m_pData;
+					if(pNext->m_X != pEvent->m_X || pNext->m_Y != pEvent->m_Y)
+						break;
+					++GunBurstCount;
+				}
+				if(GunBurstCount == 10)
+				{
+					Index += 9;
+					continue;
+				}
+			}
+
 			vec2 DamageIndPos = vec2(pEvent->m_X, pEvent->m_Y);
 			if(!m_PredictedWorld.CheckPredictedEventHandled(CGameWorld::CPredictedEvent(Item.m_Type, DamageIndPos, -1, Client()->GameTick(g_Config.m_ClDummy), pEvent->m_Angle)))
 			{
@@ -4223,7 +4244,8 @@ void CGameClient::HandlePredictedEvents(const int Tick)
 			}
 			else if(EventsIterator->m_EventId == NETEVENTTYPE_DAMAGEIND)
 			{
-				m_Effects.DamageIndicator(EventsIterator->m_Pos, direction(EventsIterator->m_ExtraInfo / 256.0f), Alpha);
+				if(g_Config.m_GcGunHitDamageInd)
+					m_Effects.DamageIndicator(EventsIterator->m_Pos, direction(EventsIterator->m_ExtraInfo / 256.0f), Alpha);
 			}
 
 			EventsIterator->m_Handled = true;

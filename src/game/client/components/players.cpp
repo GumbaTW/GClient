@@ -916,7 +916,7 @@ void CPlayers::RenderPlayer(
 				Graphics()->RenderQuadContainerAsSprite(m_WeaponEmoteQuadContainerIndex, QuadOffset, WeaponPosition.x, WeaponPosition.y);
 			}
 
-			if(Player.m_Weapon == WEAPON_GUN || Player.m_Weapon == WEAPON_SHOTGUN)
+			if(g_Config.m_GcGunMuzzleFlash && (Player.m_Weapon == WEAPON_GUN || Player.m_Weapon == WEAPON_SHOTGUN))
 			{
 				// check if we're firing stuff
 				if(g_pData->m_Weapons.m_aId[CurrentWeapon].m_NumSpriteMuzzles) // prev.attackticks)
@@ -1353,7 +1353,7 @@ void CPlayers::RenderPlayerGhost(
 				Graphics()->RenderQuadContainerAsSprite(m_WeaponEmoteQuadContainerIndex, QuadOffset, WeaponPosition.x, WeaponPosition.y);
 			}
 
-			if(Player.m_Weapon == WEAPON_GUN || Player.m_Weapon == WEAPON_SHOTGUN)
+			if(g_Config.m_GcGunMuzzleFlash && (Player.m_Weapon == WEAPON_GUN || Player.m_Weapon == WEAPON_SHOTGUN))
 			{
 				// check if we're firing stuff
 				if(g_pData->m_Weapons.m_aId[CurrentWeapon].m_NumSpriteMuzzles) // prev.attackticks)
