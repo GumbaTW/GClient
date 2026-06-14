@@ -3,6 +3,7 @@
 
 #include "effects.h"
 
+#include <base/math.h>
 #include <base/time.h>
 
 #include <engine/demo.h>
@@ -393,18 +394,54 @@ void CEffects::Explosion(vec2 Pos, float Alpha)
 
 void CEffects::HammerHit(vec2 Pos, float Alpha, float Volume)
 {
-	// add the explosion
-	CParticle p;
-	p.SetDefault();
-	p.m_Spr = SPRITE_PART_HIT01;
-	p.m_Pos = Pos;
-	p.m_LifeSpan = 0.3f;
-	p.m_StartSize = 120.0f;
-	p.m_EndSize = 0.0f;
-	p.m_Rot = random_angle();
-	p.m_Color.a = Alpha;
-	p.m_StartAlpha = Alpha;
-	GameClient()->m_Particles.Add(CParticles::GROUP_EXPLOSIONS, &p);
+	// Vanilla hit burst (game.png); size 0 hides it (GClient)
+	if(g_Config.m_GcHammerHitVanillaBurst > 0)
+	{
+		CParticle p;
+		p.SetDefault();
+		p.m_Spr = SPRITE_PART_HIT01;
+		p.m_Pos = Pos;
+		p.m_LifeSpan = 0.3f;
+		p.m_StartSize = (float)g_Config.m_GcHammerHitVanillaBurst;
+		p.m_EndSize = 0.0f;
+		p.m_Rot = random_angle();
+		p.m_Color.a = Alpha;
+		p.m_StartAlpha = Alpha;
+		GameClient()->m_Particles.Add(CParticles::GROUP_EXPLOSIONS, &p);
+	}
+
+	// GClient: sparkles on successful tee-vs-tee hammer (same event as vanilla hit feedback)
+	if(g_Config.m_GcHammerHitStars)
+	{
+		const int Count = maximum(1, g_Config.m_GcHammerHitStarsCount);
+		const float Spread = (float)maximum(1, g_Config.m_GcHammerHitStarsSpread);
+		const float SizeBase = (float)maximum(1, g_Config.m_GcHammerHitStarsSize);
+		const float LifeSec = maximum(0.05f, (float)g_Config.m_GcHammerHitStarsLife / 1000.0f);
+
+		for(int i = 0; i < Count; i++)
+		{
+			CParticle Spark;
+			Spark.SetDefault();
+			Spark.m_Spr = SPRITE_PART_SPARKLE;
+			Spark.m_Pos = Pos + random_direction() * random_float(0.0f, Spread);
+			Spark.m_Vel = random_direction() * random_float(15.0f, 140.0f);
+			Spark.m_LifeSpan = LifeSec * random_float(0.65f, 1.35f);
+			Spark.m_StartSize = 0.0f;
+			Spark.m_EndSize = SizeBase * random_float(0.45f, 1.15f);
+			Spark.m_UseAlphaFading = true;
+			Spark.m_StartAlpha = Alpha;
+			Spark.m_EndAlpha = 0.0f;
+			Spark.m_Rot = random_angle();
+			Spark.m_Rotspeed = random_float(-pi * 2.0f, pi * 2.0f);
+			Spark.m_Gravity = random_float(-120.0f, 80.0f);
+			Spark.m_Friction = 0.92f;
+			Spark.m_FlowAffected = 0.0f;
+			Spark.m_Collides = false;
+			Spark.m_Color = ColorRGBA(1.0f, 1.0f, 0.95f, Alpha);
+			GameClient()->m_Particles.Add(CParticles::GROUP_EXTRA, &Spark);
+		}
+	}
+
 	if(g_Config.m_SndGame)
 		GameClient()->m_Sounds.PlayAt(CSounds::CHN_WORLD, SOUND_HAMMER_HIT, Volume, Pos);
 }

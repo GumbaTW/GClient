@@ -7,6 +7,7 @@
 
 SET_CONFIG_DOMAIN(ConfigDomain::DDNET)
 #include "config_variables.h"
+#include "config_variables_gclient.h"
 
 SET_CONFIG_DOMAIN(ConfigDomain::TCLIENT)
 #include "config_variables_tclient.h"
