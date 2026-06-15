@@ -105,8 +105,8 @@ void CTClient::OnInit()
 	FetchTClientInfo();
 
 	char aError[512] = "";
-	if(!Storage()->FileExists("tclient/gui_logo.png", IStorage::TYPE_ALL))
-		str_format(aError, sizeof(aError), TCLocalize("%s not found", DATA_VERSION_PATH), "data/tclient/gui_logo.png");
+	if(!Storage()->FileExists("gclient/GClient.png", IStorage::TYPE_ALL))
+		str_format(aError, sizeof(aError), TCLocalize("%s not found", DATA_VERSION_PATH), "data/gclient/GClient.png");
 	if(aError[0] == '\0')
 		CheckDataVersion(aError, sizeof(aError), Storage()->OpenFile(DATA_VERSION_PATH, IOFLAG_READ, IStorage::TYPE_ALL));
 	if(aError[0] != '\0')

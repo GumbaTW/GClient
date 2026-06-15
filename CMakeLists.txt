@@ -1918,7 +1918,7 @@ set(EXPECTED_DATA
   tclient/fonts/Nunito-Black.ttf
   tclient/fonts/Rubik-Regular.ttf
   tclient/fonts/minecraft_font.ttf
-  tclient/gui_logo.png
+  gclient/GClient.png
   tclient/languages/arabic.txt
   tclient/languages/azerbaijani.txt
   tclient/languages/belarusian.txt
